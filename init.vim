@@ -3,47 +3,48 @@ call plug#begin()
 
 " Git
 Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+Plug 'lewis6991/gitsigns.nvim'
 
-" NERDTree
-Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" File explorer
+Plug 'kyazdani42/nvim-tree.lua'
 
-" Airline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" Statusline/tabline
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'kdheepak/tabline.nvim'
 
-" Theme
+" Theme/appearance
 Plug 'sainnhe/sonokai'
-Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'bounceme/poppy.vim'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'kyazdani42/nvim-web-devicons'
 
 " Editing
+Plug 'vim-scripts/autoclose'
 Plug 'tpope/vim-surround'
 Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-repeat'
 Plug 'elzr/vim-json'
 Plug 'rhysd/vim-clang-format'
+Plug 'lukas-reineke/indent-blankline.nvim'
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 " Completion
-Plug 'ycm-core/YouCompleteMe'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Filetype
-Plug 'r-bar/ebnf.vim'
-Plug 'vim-scripts/c.vim'
-Plug 'bfrg/vim-cpp-modern'
+Plug 'cdelledonne/vim-cmake'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 
 call plug#end()
 
 " ----- General settings -----
-se cf
+set confirm
 
 " ----- Window settings -----
 " Split below and right
-se sb spr
+set splitbelow
+set splitright
 
 " ----- Keybinding settings -----
 nnoremap <Space> <Nop>
@@ -51,100 +52,170 @@ nnoremap <Backspace> <Nop>
 nnoremap <Return> <Nop>
 let g:mapleader = ' '
 
-nnoremap <Leader>nt :NERDTreeToggle<Return>
+nnoremap <Leader>nt :NvimTreeToggle<Return>
 nnoremap <Leader>h :vert<Space>help<Space>
 
 " ----- Appearance settings -----
-syn on
-colo sonokai
-se bg=dark
+syntax on
+colorscheme sonokai
+set background=dark
 
-se cul
+lua << END
+
+require('nvim-treesitter.configs').setup {
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+    },
+}
+
+END
+
+set guifont=Hack:h11
+
+set cursorline
 
 " ----- Gutter settings -----
-se nu
+set number
+set signcolumn=yes
+
+lua << END
+
+require('gitsigns').setup {
+    signs = {
+        delete = {hl = 'GitSignsDelete', text = '>', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn'},
+        topdelete = {hl = 'GitSignsDelete', text = '>', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn'},
+        changedelete = {hl = 'GitSignsChange', text = '│', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn'}
+    }
+}
+
+END
 
 " ----- Tabline and statusline settings -----
-" The indicator in airline renders the default mode indicator useless
-se nosmd
+" The indicator in lualine renders the default mode indicator useless
+set noshowmode
+
+set guioptions-=e
+set sessionoptions+=tabpages,globals
 
 " More space for command-line
-se ch=3
+set cmdheight=3
 
-" Enable fancy Powerline symbols (arrows)
-let g:airline_powerline_fonts = 1
+lua << END
+require('lualine').setup {
+    options = {
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
+        globalstatus = true
+    },
+    sections = {
+        lualine_a = {
+        { 'mode', fmt = function(str) return str:sub(1,1) end } },
+        lualine_b = {'branch', 'diff', { 'diagnostics',
+            sources = { 'coc' },
+            colored = true,
+            update_in_insert = true,
+            always_visible = true
+        }},
+        lualine_c = {
+            { 'filename',
+                path = 1,
+                symbols = {
+                    modified = ' ●',
+                    readonly = ' '
+                }
+            }
+        },
+        lualine_x = {},
+        lualine_y = {'filetype'}
+    },
+    extensions = {'fugitive', 'nvim-tree'}
+}
+require('tabline').setup {
+    enable = true,
+    options = {
+        max_bufferline_percent = 66, -- set to nil by default, and it uses vim.o.columns * 2/3
+        show_tabs_always = false, -- this shows tabs only when there are more than one tab or if the first tab is named
+        show_devicons = true, -- this shows devicons in buffer section
+        show_bufnr = false, -- this appends [bufnr] to buffer section,
+        modified_italic = false, -- set to true by default; this determines whether the filename turns italic if modified
+    }
+}
+END
 
-" Enable enhanced tabline
-let g:airline#extensions#tabline#enabled = 1
+" ----- Nvim Tree settings -----
+lua << END
 
-" Use short forms of modes
-let g:airline_mode_map = {
-      \ '__'     : '-',
-      \ 'c'      : 'C',
-      \ 'i'      : 'I',
-      \ 'ic'     : 'I',
-      \ 'ix'     : 'I',
-      \ 'n'      : 'N',
-      \ 'multi'  : 'M',
-      \ 'ni'     : 'N',
-      \ 'no'     : 'N',
-      \ 'R'      : 'R',
-      \ 'Rv'     : 'R',
-      \ 's'      : 'S',
-      \ 'S'      : 'S',
-      \ ''     : 'S',
-      \ 't'      : 'T',
-      \ 'v'      : 'V',
-      \ 'V'      : 'V',
-      \ ''     : 'V',
-      \ }
+require("nvim-tree").setup({
+    sort_by = "case_sensitive",
+    view = {
+        adaptive_size = true,
+        mappings = {
+            list = {
+                { key = "u", action = "dir_up" },
+            },
+        },
+    },
+    renderer = {
+        group_empty = true,
+    },
+    filters = {
+        dotfiles = true,
+    },
+})
 
-" Skip empty sections in statusbar -- no use showing them
-let g:airline_skip_empty_sections = 1
+END
 
-" ----- NERDTree settings -----
-" Start NERDTree when Vim is started without file arguments.
-au StdinReadPre * let s:std_in=1
-au VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | en
+" ----- Completion settings -----
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
 
-" Exit Vim if NERDTree is the only window remaining in the only tab.
-au BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree')
-    \ && b:NERDTree.isTabTree() | q | en
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
 
-" Close the tab if NERDTree is the only window remaining in it.
-au BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | q | en
-
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-au BufEnter * if bufname('"') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | b" | exe 'normal! \<C-W>w' | exe 'buffer'.buf | en
-
-let g:NERDTreeHighlightFolders = 1
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " ----- Editing settings -----
-" Always use UTF-8
-se enc=UTF-8
+" Folding
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+set foldlevelstart=99
 
 " Allow mouse interaction
-se mouse=a
+set mouse=a
 
 " Powerful backspace
-se bs=indent,eol,start
+set backspace=indent,eol,start
 
 " OS Clipboard
-se cb=unnamed
+set clipboard=unnamed
 
 " Line limit
-se cc=120 wm=120 tw=119
+set colorcolumn=120
+set textwidth=119
 
 " Indenting
-se et sw=4 sts=4 ts=4 ai sta si
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set autoindent
+set smarttab
+set smartindent
 
-fu s:python_config()
+function! s:python_config()
     " Set PEP 8 line limit at 80 characters
-    se cc=80 wm=80 tw=79
+    set colorcolumn=80
+    set textwidth=79
 
     " Enable folding
-    se fdm=indent
+    set foldmethod=indent
 
     " Configure pymode
     let g:pymode = 1
@@ -180,38 +251,39 @@ fu s:python_config()
     let g:pymode_rope_complete_on_dot = 1
     let g:pymode_rope_completion_bind = '<C-Space>'
     let g:pymode_rope_autoimport = 0
-endf
+endfunction
 
-fu s:make_config()
+function! s:make_config()
     " Makefiles do not work with space tabs
-    se noet
-endf
+    set noexpandtab
+endfunction
 
-fu  s:c_cpp_config()
+function!  s:c_cpp_config()
     " Set C indent option
-    se cin
+    set cindent
 
     " Set clang-format options
     let g:clang_format#detect_style_file = 1
     let g:clang_format#auto_format = 1
     let g:clang_format#auto_filetypes = ['c', 'cpp', 'objc']
-endf
+endfunction
 
-fu s:c_config()
+function! s:c_config()
+    setfiletype c
     call s:c_cpp_config()
 
     " Enable folding
-    se fdm=syntax
-endf
+    set foldmethod=syntax
+endfunction
 
-fu s:cpp_config()
+function! s:cpp_config()
+    setfiletype cpp
     call s:c_cpp_config()
-endf
+endfunction
 
-aug filetype_config
-    au BufRead,BufNewFile *.py call s:python_config()
-    au BufRead,BufNewFile Makefile* call s:make_config()
-    au BufRead,BufNewFile *.c,*.h call s:c_config()
-    au BufRead,BufNewFile *.cpp,*.cc,*.cxx,*.c++,*.C,
-                         \*.hpp,*.hh,*.hxx,*.h++,*.H call s:cpp_config()
-aug END
+augroup filetype_config
+    autocmd BufRead,BufNewFile *.py call s:python_config()
+    autocmd BufRead,BufNewFile Makefile call s:make_config()
+    autocmd BufRead,BufNewFile *.c,*.h call s:c_config()
+    autocmd BufRead,BufNewFile *.cpp,*.cc,*.cxx,*.c++,*.C,*.hpp,*.hh,*.hxx,*.h++,*.H call s:cpp_config()
+augroup END
