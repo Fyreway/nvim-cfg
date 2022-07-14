@@ -102,35 +102,35 @@ set sessionoptions+=tabpages,globals
 set cmdheight=3
 
 lua << END
-require('lualine').setup {
-    options = {
-        component_separators = { left = '', right = '' },
-        section_separators = { left = '', right = '' },
-        globalstatus = true
-    },
-    sections = {
-        lualine_a = {
-        { 'mode', fmt = function(str) return str:sub(1,1) end } },
-        lualine_b = {'branch', 'diff', { 'diagnostics',
-            sources = { 'coc' },
-            colored = true,
-            update_in_insert = true,
-            always_visible = true
-        }},
-        lualine_c = {
-            { 'filename',
-                path = 1,
-                symbols = {
-                    modified = ' ●',
-                    readonly = ' '
-                }
-            }
-        },
-        lualine_x = {},
-        lualine_y = {'filetype'}
-    },
-    extensions = {'fugitive', 'nvim-tree'}
-}
+ require('lualine').setup {
+     options = {
+         component_separators = { left = '', right = '' },
+         section_separators = { left = '', right = '' },
+         globalstatus = true
+     },
+     sections = {
+         lualine_a = {
+         { 'mode', fmt = function(str) return str:sub(1,1) end } },
+         lualine_b = {'branch', 'diff', { 'diagnostics',
+             sources = { 'coc' },
+             colored = true,
+             update_in_insert = true,
+             always_visible = true
+         }},
+         lualine_c = {
+             { 'filename',
+                 path = 1,
+                 symbols = {
+                     modified = ' ●',
+                     readonly = ' '
+                 }
+             }
+         },
+         lualine_x = {},
+         lualine_y = {'filetype'}
+     },
+     extensions = {'fugitive', 'nvim-tree'}
+ }
 require('tabline').setup {
     enable = true,
     options = {
