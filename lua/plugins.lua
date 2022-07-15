@@ -53,6 +53,7 @@ return require("packer").startup(function()
         end
     }
 
+    -- Lualine
     use {
         "nvim-lualine/lualine.nvim",
         requires = {
@@ -117,6 +118,7 @@ return require("packer").startup(function()
         end
     }
 
+    -- Tabline
     use {
         "kdheepak/tabline.nvim",
         requires = { "kyazdani42/nvim-web-devicons", },
@@ -134,6 +136,7 @@ return require("packer").startup(function()
         end
     }
 
+    -- Treesitter
     use {
         "nvim-treesitter/nvim-treesitter",
         config = function()
@@ -146,6 +149,7 @@ return require("packer").startup(function()
         end
     }
 
+    -- Autoclosing brackets
     use {
         "windwp/nvim-autopairs",
         config = function()
@@ -153,27 +157,39 @@ return require("packer").startup(function()
         end
     }
 
+    -- Bracket operations
     use "tpope/vim-surround"
 
+    -- Comment operations
     use "preservim/nerdcommenter"
 
+    -- More powerful '.'
     use "tpope/vim-repeat"
 
+    -- Better JSON
     use "elzr/vim-json"
 
+    -- clang-format support
     use "rhysd/vim-clang-format"
 
+    -- Indent guides
     use "lukas-reineke/indent-blankline.nvim"
 
+    -- Look up anything
     use {
         "nvim-telescope/telescope.nvim",
         requires = { "nvim-lua/plenary.nvim" },
     }
 
+    -- CoC
     use {
         "neoclide/coc.nvim",
         branch = "release",
     }
 
+    -- CMake
     use "cdelledonne/vim-cmake"
+
+    -- Speed up loading times
+    use "lewis6991/impatient.nvim"
 end)

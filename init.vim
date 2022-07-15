@@ -1,8 +1,11 @@
 " ----- Plugins -----
+lua require("impatient")
 lua require("plugins")
 
 " ----- General settings -----
 set confirm
+let g:loaded_ruby_provider = 0
+let g:loaded_perl_provider = 0
 
 " ----- Window settings -----
 " Split below and right
