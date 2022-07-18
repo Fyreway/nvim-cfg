@@ -18,21 +18,26 @@ nnoremap <Backspace> <Nop>
 nnoremap <Return> <Nop>
 let g:mapleader = " "
 
-nnoremap <Leader>nt :NvimTreeToggle<Return>
+" Trigger help
 nnoremap <Leader>h :vert<Space>help<Space>
 
+" Buffer operations
 nnoremap <Leader><Tab> :bn
 nnoremap <Leader><S-Tab> :bp
+nnoremap <Leader>o :e<Space>
 nnoremap <Leader>bq :bp<Return>:bd<Space>#<Return>
 
+" Shift line down/up (useful VSCode shortcut)
 inoremap <C-Down> <Esc>ddpi
 inoremap <C-Up> <Esc>ddkkpi
 
+" Copy line down/up (useful VSCode shortcut)
+inoremap <C-S-Down> <Esc>yypi
+inoremap <C-S-Up> <Esc>yykpi
+
 " ----- Appearance settings -----
-syntax on
+colorscheme monokai_pro
 set termguicolors
-colorscheme one
-let g:one_allow_italics = 1
 set background=dark
 
 set cursorline
@@ -50,8 +55,6 @@ set sessionoptions+=tabpages,globals
 
 " More space for command-line
 set cmdheight=3
-
-" ----- Nvim Tree settings -----
 
 " ----- Completion settings -----
 " use <tab> for trigger completion and navigate to the next complete item
@@ -73,6 +76,7 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set foldlevelstart=99
+set foldlevel=99
 
 " Allow mouse interaction
 set mouse=a
@@ -107,7 +111,7 @@ function! s:make_config()
     set noexpandtab
 endfunction
 
-function!  s:c_cpp_config()
+function! s:c_cpp_config()
     " Set C indent option
     set cindent
 
