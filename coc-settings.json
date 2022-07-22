@@ -1,4 +1,5 @@
 {
     "clangd.inlayHints.enable": false,
-    "clangd.path": "/usr/bin/clangd"
+    "clangd.path": "/usr/bin/clangd",
+    "Lua.diagnostics.globals": ["vim"]
 }
