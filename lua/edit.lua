@@ -9,9 +9,6 @@ vim.opt.mouse = 'a'
 -- Allow backspace to delete everything
 vim.opt.backspace = {'indent', 'eol', 'start'}
 
--- Sync with OS clipboard
-vim.opt.clipboard = 'unnamed'
-
 local function set_indent(spaces)
     if spaces < 0 then
         vim.opt_local.tabstop = -spaces
