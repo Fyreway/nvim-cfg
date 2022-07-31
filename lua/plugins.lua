@@ -28,8 +28,7 @@ return require('packer').startup(function()
         requires = {
             'kyazdani42/nvim-web-devicons',
             'kdheepak/tabline.nvim',
-            'tpope/vim-fugitive',
-            'kyazdani42/nvim-tree.lua'
+            'tpope/vim-fugitive'
         },
         config = function()
             require('lualine').setup {
