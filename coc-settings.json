@@ -1,5 +1,4 @@
 {
     "clangd.inlayHints.enable": false,
-    "Lua.diagnostics.globals": ["vim"],
     "rust-analyzer.inlayHints.enable": false
 }
