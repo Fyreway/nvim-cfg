@@ -1,5 +1,5 @@
 {
     "clangd.inlayHints.enable": false,
-    "clangd.path": "/usr/bin/clangd",
-    "Lua.diagnostics.globals": ["vim"]
+    "Lua.diagnostics.globals": ["vim"],
+    "rust-analyzer.inlayHints.enable": false
 }
