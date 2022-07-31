@@ -1,14 +1,15 @@
-return require'packer'.startup(function()
+return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
 
     use 'tanvirtin/monokai.nvim'
 
     -- Git
     use 'tpope/vim-fugitive'
+
     use {
         'lewis6991/gitsigns.nvim',
         config = function()
-            require'gitsigns'.setup {
+            require('gitsigns').setup {
                 signs = {
                     delete = {hl = 'GitSignsDelete', text = '>',
                               numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn'},
@@ -18,25 +19,6 @@ return require'packer'.startup(function()
                                     numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn'}
                 }
             }
-        end
-    }
-
-    -- File explorer
-    use {
-        'kyazdani42/nvim-tree.lua',
-        requires = {'kyazdani42/nvim-web-devicons'},
-        config = function()
-            require'nvim-tree'.setup {
-                sort_by = 'case_sensitive',
-                view = {adaptive_size = true},
-                renderer = {group_empty = true},
-                filters = {dotfiles = true}
-            }
-
-            vim.keymap.set('n', '<Leader>nt', ':NvimTreeToggle<Return>', {
-                noremap = true,
-                silent = true
-            })
         end
     }
 
@@ -50,7 +32,7 @@ return require'packer'.startup(function()
             'kyazdani42/nvim-tree.lua'
         },
         config = function()
-            require'lualine'.setup {
+            require('lualine').setup {
                 options = {
                     component_separators = {left = '', right = ''},
                     section_separators = {left = '', right = ''},
@@ -72,10 +54,10 @@ return require'packer'.startup(function()
                     lualine_y = {'filetype'}
                 },
                 tabline = {
-                    lualine_c = {require'tabline'.tabline_buffers},
+                    lualine_c = {require('tabline').tabline_buffers},
                     lualine_y = {'os.date("%I:%M:%S", os.time())'}
                 },
-                extensions = {'fugitive', 'nvim-tree'}
+                extensions = {'fugitive'}
             }
 
             if _G.Statusline_timer == nil then
@@ -85,7 +67,7 @@ return require'packer'.startup(function()
             end
 
             _G.Statusline_timer:start(0, 1000, vim.schedule_wrap(function()
-                vim.api.nvim_command('redrawtabline')
+                vim.cmd 'redrawtabline'
             end))
         end
     }
@@ -95,7 +77,7 @@ return require'packer'.startup(function()
         'kdheepak/tabline.nvim',
         requires = {'kyazdani42/nvim-web-devicons'},
         config = function()
-            require'tabline'.setup {
+            require('tabline').setup {
                 enable = false,
                 options = {
                     max_bufferline_percent = 66,
@@ -112,7 +94,20 @@ return require'packer'.startup(function()
     use {
         'nvim-treesitter/nvim-treesitter',
         config = function()
-            require'nvim-treesitter.configs'.setup {
+            require('nvim-treesitter.configs').setup {
+                ensure_installed = {
+                    'c',
+                    'cpp',
+                    'javascript',
+                    'json',
+                    'jsonc',
+                    'json5',
+                    'lua',
+                    'python',
+                    'rust',
+                    'typescript',
+                    'vim'
+                },
                 highlight = {enable = true, additional_vim_regex_highlighting = false}
             }
         end
@@ -121,9 +116,7 @@ return require'packer'.startup(function()
     -- Autoclosing brackets
     use {
 	    'windwp/nvim-autopairs',
-        config = function()
-            require'nvim-autopairs'.setup {}
-        end
+        config = function() require('nvim-autopairs').setup {} end
     }
 
     -- Bracket operations
@@ -142,10 +135,22 @@ return require'packer'.startup(function()
     use 'rhysd/vim-clang-format'
 
     -- Indent guides
-    use 'lukas-reineke/indent-blankline.nvim'
+    use {
+        'lukas-reineke/indent-blankline.nvim',
+        config = function() require('indent_blankline').setup {filetype_exclude = {'dashboard'}} end
+    }
 
     -- Look up anything
-    use {'nvim-telescope/telescope.nvim', requires = {'nvim-lua/plenary.nvim'}}
+    use {
+        'nvim-telescope/telescope.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'nvim-telescope/telescope-file-browser.nvim'
+        },
+        config = function()
+            require('telescope').load_extension 'file_browser'
+        end
+    }
 
     -- CoC
     use {'neoclide/coc.nvim', branch = 'release'}

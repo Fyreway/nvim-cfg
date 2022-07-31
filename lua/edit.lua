@@ -24,7 +24,7 @@ local function set_indent(spaces)
 end
 
 local function set_linelim(lim)
-    vim.opt_local.colorcolumn = lim
+    vim.opt_local.colorcolumn = tostring(lim)
     vim.opt_local.textwidth = lim - 1
 end
 
@@ -33,9 +33,13 @@ vim.opt.autoindent = true
 vim.opt.smarttab = true
 vim.opt.smartindent = true
 
+local function default_cfg()
+    set_linelim(120)
+    set_indent(4)
+end
+
 local function py_cfg()
     set_linelim(80)
-    set_indent(4)
 end
 
 local function make_cfg()
@@ -49,7 +53,7 @@ local function c_cpp_cfg()
     vim.g['clang_format#auto_format'] = 1
     vim.g['clang_format#auto_filetypes'] = {'c', 'cpp'}
 
-    vim.keymap.set('n', '<Leader>gd', ':CocCommand clangd.switchSourceHeader<Return>', { noremap = true, silent = true })
+    vim.keymap.set('n', '<Leader>gd', ':CocCommand clangd.switchSourceHeader<Return>', {noremap = true, silent = true})
 end
 
 local function c_cfg()
@@ -61,6 +65,11 @@ local function cpp_cfg()
 end
 
 vim.filetype.add {extension = {h = 'c'}}
+
+vim.api.nvim_create_autocmd({'BufEnter', 'BufNewFile'}, {
+    pattern = {'*'},
+    callback = default_cfg
+})
 
 vim.api.nvim_create_autocmd({'BufEnter', 'BufNewFile'}, {
     pattern = {'*.py'},
