@@ -66,6 +66,13 @@ end
 
 vim.filetype.add {extension = {h = 'c'}}
 
+
+vim.api.nvim_create_autocmd({'BufWritePre'}, {
+    pattern = {'*'},
+    callback = function() vim.cmd 'undojoin | Neoformat' end
+})
+
+
 vim.api.nvim_create_autocmd({'BufEnter', 'BufNewFile'}, {
     pattern = {'*'},
     callback = default_cfg

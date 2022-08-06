@@ -130,8 +130,14 @@ return require('packer').startup(function()
     -- Better JSON
     use 'elzr/vim-json'
 
-    -- clang-format support
-    use 'rhysd/vim-clang-format'
+    -- Formatting
+    use {
+        'sbdchd/neoformat',
+        config = function()
+            vim.g.neoformat_enabled_c = {'clang-format'}
+            vim.g.neoformat_enabled_cpp = {'clang-format'}
+        end
+    }
 
     -- Indent guides
     use {
