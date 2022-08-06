@@ -1,4 +1,4 @@
 {
     "clangd.inlayHints.enable": false,
-    "clangd.path": "~/homebrew/opt/llvm/bin/clangd"
+    "rust-analyzer.inlayHints.enable": false
 }
