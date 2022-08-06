@@ -6,27 +6,13 @@ return require('packer').startup(function()
     -- Git
     use 'tpope/vim-fugitive'
 
-    use {
-        'lewis6991/gitsigns.nvim',
-        config = function()
-            require('gitsigns').setup {
-                signs = {
-                    delete = {hl = 'GitSignsDelete', text = '>',
-                              numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn'},
-                    topdelete = {hl = 'GitSignsDelete', text = '>',
-                                 numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn'},
-                    changedelete = {hl = 'GitSignsChange', text = '│',
-                                    numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn'}
-                }
-            }
-        end
-    }
+    use 'lewis6991/gitsigns.nvim'
 
     -- Lualine
     use {
         'nvim-lualine/lualine.nvim',
-        requires = {
-            'kyazdani42/nvim-web-devicons',
+        requires = {'kyazdani42/nvim-web-devicons'},
+        after = {
             'kdheepak/tabline.nvim',
             'tpope/vim-fugitive'
         },
@@ -122,7 +108,7 @@ return require('packer').startup(function()
     use 'tpope/vim-surround'
 
     -- Comment operations
-    use 'preservim/nerdcommenter'
+    use 'tpope/vim-commentary'
 
     -- More powerful '.'
     use 'tpope/vim-repeat'
@@ -148,17 +134,33 @@ return require('packer').startup(function()
     -- Look up anything
     use {
         'nvim-telescope/telescope.nvim',
-        requires = {
-            'nvim-lua/plenary.nvim',
-            'nvim-telescope/telescope-file-browser.nvim'
-        },
-        config = function()
-            require('telescope').load_extension 'file_browser'
-        end
+        requires = {'nvim-lua/plenary.nvim'}
+    }
+
+    use {
+        'nvim-telescope/telescope-file-browser.nvim',
+        after = {'nvim-telescope/telescope.nvim'},
+        config = function() require('telescope').load_extension 'file_browser' end
     }
 
     -- CoC
-    use {'neoclide/coc.nvim', branch = 'release'}
+    use {
+        'neoclide/coc.nvim',
+        branch = 'release',
+        run = function() vim.cmd [[
+            :CocInstall
+                \ coc-marketplace
+                \ coc-lua
+                \ coc-clang-format-style-options
+                \ coc-vimlsp
+                \ coc-tsserver
+                \ coc-rust-analyzer
+                \ coc-pyright
+                \ coc-json
+                \ coc-cmake
+                \ coc-clangd
+        ]] end
+    }
 
     -- CMake
     use 'cdelledonne/vim-cmake'
