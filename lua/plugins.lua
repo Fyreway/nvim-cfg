@@ -13,16 +13,13 @@ return require('packer').startup(function()
         'nvim-lualine/lualine.nvim',
         requires = {'kyazdani42/nvim-web-devicons'},
         after = {
-            'kdheepak/tabline.nvim',
-            'tpope/vim-fugitive'
+            'tabline.nvim',
+            'vim-fugitive',
+            'coc.nvim'
         },
         config = function()
             require('lualine').setup {
-                options = {
-                    component_separators = {left = '', right = ''},
-                    section_separators = {left = '', right = ''},
-                    globalstatus = true
-                },
+                options = {globalstatus = true},
                 sections = {
                     lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end}},
                     lualine_b = {
@@ -113,6 +110,9 @@ return require('packer').startup(function()
     -- More powerful '.'
     use 'tpope/vim-repeat'
 
+    -- Insert 'end'
+    use 'tpope/vim-endwise'
+
     -- Better JSON
     use 'elzr/vim-json'
 
@@ -139,7 +139,7 @@ return require('packer').startup(function()
 
     use {
         'nvim-telescope/telescope-file-browser.nvim',
-        after = {'nvim-telescope/telescope.nvim'},
+        after = {'telescope.nvim'},
         config = function() require('telescope').load_extension 'file_browser' end
     }
 
