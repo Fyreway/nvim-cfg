@@ -177,4 +177,7 @@ return require('packer').startup(function()
         requires = {'neovim/nvim-lspconfig'},
         config = function() require('rust-tools').setup {tools = {autoSetHints = false}} end
     }
+
+    -- MCFunction
+    use 'IY314/vim-mcfunction'
 end)
