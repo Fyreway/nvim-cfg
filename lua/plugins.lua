@@ -6,7 +6,7 @@ return require('packer').startup(function()
     -- Git
     use 'tpope/vim-fugitive'
 
-    use 'lewis6991/gitsigns.nvim'
+    use 'airblade/vim-gitgutter'
 
     -- Lualine
     use {
@@ -170,4 +170,11 @@ return require('packer').startup(function()
 
     -- Go anywhere quicker
     use 'ggandor/lightspeed.nvim'
+
+    -- Rust
+    use {
+        'simrat39/rust-tools.nvim',
+        requires = {'neovim/nvim-lspconfig'},
+        config = function() require('rust-tools').setup {tools = {autoSetHints = false}} end
+    }
 end)
