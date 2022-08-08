@@ -167,4 +167,7 @@ return require('packer').startup(function()
 
     -- Speed up loading times
     use 'lewis6991/impatient.nvim'
+
+    -- Go anywhere quicker
+    use 'ggandor/lightspeed.nvim'
 end)
