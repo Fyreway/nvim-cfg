@@ -1,5 +1,4 @@
 -- Appearance
-vim.cmd 'colorscheme monokai_pro'
 vim.opt.termguicolors = true
 vim.opt.background = 'dark'
 
