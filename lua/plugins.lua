@@ -180,13 +180,6 @@ return require('packer').startup(function(use)
     -- Go anywhere quicker
     use 'ggandor/lightspeed.nvim'
 
-    -- Rust
-    use {
-        'simrat39/rust-tools.nvim',
-        requires = {'neovim/nvim-lspconfig'},
-        config = function() require('rust-tools').setup {tools = {autoSetHints = false}} end
-    }
-
     -- MCFunction
     use 'IY314/vim-mcfunction'
 
