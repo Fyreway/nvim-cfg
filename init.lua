@@ -1,4 +1,3 @@
-require('impatient')
 require('plugins')
 require('window')
 require('keybindings')
