@@ -8,8 +8,8 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
 
     use {
-        'tanvirtin/monokai.nvim',
-        config = function() vim.cmd 'colorscheme monokai_pro' end
+        'morhetz/gruvbox',
+        config = function() vim.cmd 'colo gruvbox' end
     }
 
     -- Git
