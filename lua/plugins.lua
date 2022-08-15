@@ -1,6 +1,7 @@
+-- Bootstrap packer for newly cloned configs
 local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    Packer_bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    Packer_bootstrap = vim.fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
     vim.cmd 'packadd packer.nvim'
 end
 
@@ -8,8 +9,9 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
 
     use {
-        'morhetz/gruvbox',
-        config = function() vim.cmd 'colo gruvbox' end
+        'luisiacc/gruvbox-baby',
+        branch = 'main',
+        config = function() vim.cmd 'colo gruvbox-baby' end
     }
 
     -- Git
@@ -20,7 +22,7 @@ return require('packer').startup(function(use)
     -- Lualine
     use {
         'nvim-lualine/lualine.nvim',
-        requires = {'kyazdani42/nvim-web-devicons'},
+        requires = { 'kyazdani42/nvim-web-devicons' },
         after = {
             'tabline.nvim',
             'vim-fugitive',
@@ -28,27 +30,23 @@ return require('packer').startup(function(use)
         },
         config = function()
             require('lualine').setup {
-                options = {globalstatus = true},
+                options = { globalstatus = true },
                 sections = {
-                    lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end}},
+                    lualine_a = {{ 'mode', fmt = function(str) return str:sub(1,1) end }},
                     lualine_b = {
                         'branch',
                         'diff',
-                        {'diagnostics', sources = {'coc'}, colored = true,
-                            update_in_insert = true, always_visible = true}
-                    },
-                    lualine_c = {{'filename', path = 1, symbols = {
-                        modified = ' ●',
-                        readonly = ' '
-                    }}},
+                        { 'diagnostics', sources = { 'coc' }, colored = true,
+                        update_in_insert = true, always_visible = true } },
+                    lualine_c = {{ 'filename', path = 1, symbols = { modified = ' ●', readonly = ' ' } }},
                     lualine_x = {},
-                    lualine_y = {'filetype'}
+                    lualine_y = { 'filetype' }
                 },
                 tabline = {
-                    lualine_c = {require('tabline').tabline_buffers},
-                    lualine_y = {'os.date("%I:%M:%S", os.time())'}
+                    lualine_c = { require('tabline').tabline_buffers },
+                    lualine_y = { 'os.date("%I:%M:%S", os.time())' }
                 },
-                extensions = {'fugitive'}
+                extensions = { 'fugitive' }
             }
 
             if _G.Statusline_timer == nil then
@@ -57,16 +55,14 @@ return require('packer').startup(function(use)
                 _G.Statusline_timer:stop()
             end
 
-            _G.Statusline_timer:start(0, 1000, vim.schedule_wrap(function()
-                vim.cmd 'redrawtabline'
-            end))
+            _G.Statusline_timer:start(0, 1000, vim.schedule_wrap(function() vim.cmd 'redrawtabline' end))
         end
     }
 
     -- Tabline
     use {
         'kdheepak/tabline.nvim',
-        requires = {'kyazdani42/nvim-web-devicons'},
+        requires = { 'kyazdani42/nvim-web-devicons' },
         config = function()
             require('tabline').setup {
                 enable = false,
@@ -81,7 +77,7 @@ return require('packer').startup(function(use)
         end
     }
 
-    -- Treesitter
+    -- Syntax highlighting
     use {
         'nvim-treesitter/nvim-treesitter',
         config = function()
@@ -99,9 +95,15 @@ return require('packer').startup(function(use)
                     'typescript',
                     'vim'
                 },
-                highlight = {enable = true, additional_vim_regex_highlighting = false}
+                highlight = { enable = true, additional_vim_regex_highlighting = false }
             }
         end
+    }
+
+    use {
+        'm-demare/hlargs.nvim',
+        requires = { 'nvim-treesitter/nvim-treesitter' },
+        config = function() require('hlargs').setup {} end
     }
 
     -- Autoclosing brackets
@@ -111,7 +113,10 @@ return require('packer').startup(function(use)
     }
 
     -- Bracket operations
-    use 'tpope/vim-surround'
+    use {
+        'kylechui/nvim-surround',
+        config = function() require('nvim-surround').setup {} end
+    }
 
     -- Comment operations
     use 'tpope/vim-commentary'
@@ -129,26 +134,26 @@ return require('packer').startup(function(use)
     use {
         'sbdchd/neoformat',
         config = function()
-            vim.g.neoformat_enabled_c = {'clang-format'}
-            vim.g.neoformat_enabled_cpp = {'clang-format'}
+            vim.g.neoformat_enabled_c = { 'clang-format' }
+            vim.g.neoformat_enabled_cpp = { 'clang-format' }
         end
     }
 
     -- Indent guides
     use {
         'lukas-reineke/indent-blankline.nvim',
-        config = function() require('indent_blankline').setup {filetype_exclude = {'dashboard'}} end
+        config = function() require('indent_blankline').setup { filetype_exclude = { 'dashboard' } } end
     }
 
     -- Look up anything
     use {
         'nvim-telescope/telescope.nvim',
-        requires = {'nvim-lua/plenary.nvim'}
+        requires = { 'nvim-lua/plenary.nvim' }
     }
 
     use {
         'nvim-telescope/telescope-file-browser.nvim',
-        after = {'telescope.nvim'},
+        after = { 'telescope.nvim' },
         config = function() require('telescope').load_extension 'file_browser' end
     }
 
@@ -182,6 +187,8 @@ return require('packer').startup(function(use)
 
     -- MCFunction
     use 'IY314/vim-mcfunction'
+
+    use 'jghauser/mkdir.nvim'
 
     if Packer_bootstrap then
         require('packer').sync()
