@@ -24,15 +24,13 @@ return require('packer').startup(function(use)
     -- Lualine
     use {
         'nvim-lualine/lualine.nvim',
-        requires = { 'kyazdani42/nvim-web-devicons' },
+        requires = 'kyazdani42/nvim-web-devicons',
         after = {
-            'tabline.nvim',
             'vim-fugitive',
             'coc.nvim'
         },
         config = function()
             require('lualine').setup {
-                options = { globalstatus = true },
                 sections = {
                     lualine_a = {{ 'mode', fmt = function(str) return str:sub(1,1) end }},
                     lualine_b = {
@@ -43,10 +41,6 @@ return require('packer').startup(function(use)
                     lualine_c = {{ 'filename', path = 1, symbols = { modified = ' ●', readonly = ' ' } }},
                     lualine_x = {},
                     lualine_y = { 'filetype' }
-                },
-                tabline = {
-                    lualine_c = { require('tabline').tabline_buffers },
-                    lualine_y = { 'os.date("%I:%M:%S", os.time())' }
                 },
                 extensions = { 'fugitive' }
             }
@@ -61,21 +55,13 @@ return require('packer').startup(function(use)
         end
     }
 
-    -- Tabline
+    -- Bufferline
     use {
-        'kdheepak/tabline.nvim',
-        requires = { 'kyazdani42/nvim-web-devicons' },
+        'akinsho/bufferline.nvim',
+        tag = 'v2.*',
+        requires = 'kyazdani42/nvim-web-devicons',
         config = function()
-            require('tabline').setup {
-                enable = false,
-                options = {
-                    max_bufferline_percent = 66,
-                    show_tabs_always = false,
-                    show_devicons = true,
-                    show_bufnr = false,
-                    modified_italic = false
-                }
-            }
+            require('bufferline').setup {}
         end
     }
 
@@ -104,7 +90,7 @@ return require('packer').startup(function(use)
 
     use {
         'm-demare/hlargs.nvim',
-        requires = { 'nvim-treesitter/nvim-treesitter' },
+        requires = 'nvim-treesitter/nvim-treesitter',
         config = function() require('hlargs').setup {} end
     }
 
@@ -150,12 +136,12 @@ return require('packer').startup(function(use)
     -- Look up anything
     use {
         'nvim-telescope/telescope.nvim',
-        requires = { 'nvim-lua/plenary.nvim' }
+        requires = 'nvim-lua/plenary.nvim'
     }
 
     use {
         'nvim-telescope/telescope-file-browser.nvim',
-        after = { 'telescope.nvim' },
+        after = 'telescope.nvim',
         config = function() require('telescope').load_extension 'file_browser' end
     }
 
