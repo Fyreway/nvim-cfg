@@ -13,4 +13,4 @@ function _G.tabmap()
     end
 end
 
-vim.keymap.set('i', '<Tab>', 'v:lua.tabmap()', { silent = true, expr = true })
+vim.keymap.set('i', '<Tab>', 'v:lua.tabmap()', { silent = true, expr = true, noremap = true, replace_keycodes = false })

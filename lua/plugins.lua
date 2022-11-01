@@ -71,17 +71,12 @@ return require('packer').startup(function(use)
         config = function()
             require('nvim-treesitter.configs').setup {
                 ensure_installed = {
-                    'c',
-                    'cpp',
-                    'javascript',
+                    'lua',
+                    'rust',
+                    'vim',
                     'json',
                     'jsonc',
-                    'json5',
-                    'lua',
-                    'python',
-                    'rust',
-                    'typescript',
-                    'vim'
+                    'toml'
                 },
                 highlight = { enable = true, additional_vim_regex_highlighting = false }
             }
@@ -119,13 +114,7 @@ return require('packer').startup(function(use)
     use 'elzr/vim-json'
 
     -- Formatting
-    use {
-        'sbdchd/neoformat',
-        config = function()
-            vim.g.neoformat_enabled_c = { 'clang-format' }
-            vim.g.neoformat_enabled_cpp = { 'clang-format' }
-        end
-    }
+    use 'sbdchd/neoformat'
 
     -- Indent guides
     use {
@@ -153,28 +142,15 @@ return require('packer').startup(function(use)
             :CocInstall
                 \ coc-marketplace
                 \ coc-lua
-                \ coc-clang-format-style-options
                 \ coc-vimlsp
-                \ coc-tsserver
                 \ coc-rust-analyzer
-                \ coc-pyright
                 \ coc-json
-                \ coc-cmake
-                \ coc-clangd
+                \ coc-toml
         ]] end
     }
 
-    -- CMake
-    use 'cdelledonne/vim-cmake'
-
     -- Speed up loading times
     use 'lewis6991/impatient.nvim'
-
-    -- Go anywhere quicker
-    use 'ggandor/lightspeed.nvim'
-
-    -- MCFunction
-    use 'IY314/vim-mcfunction'
 
     use 'jghauser/mkdir.nvim'
 
