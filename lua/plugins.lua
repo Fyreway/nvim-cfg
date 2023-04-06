@@ -1,144 +1,180 @@
 -- Bootstrap packer for newly cloned configs
-local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    Packer_bootstrap = vim.fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
-    vim.cmd 'packadd packer.nvim'
+    Packer_bootstrap =
+        vim.fn.system({"git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path})
+    vim.cmd "packadd packer.nvim"
 else
-    require('impatient')
+    require("impatient")
 end
 
-return require('packer').startup(function(use)
-    use 'wbthomason/packer.nvim'
+return require("packer").startup(
+    function(use)
+        use "wbthomason/packer.nvim"
 
-    use {
-        'luisiacc/gruvbox-baby',
-        branch = 'main',
-        config = function() vim.cmd 'colo gruvbox-baby' end
-    }
-
-    -- Git
-    use 'tpope/vim-fugitive'
-
-    use 'airblade/vim-gitgutter'
-
-    -- Lualine
-    use {
-        'nvim-lualine/lualine.nvim',
-        requires = 'kyazdani42/nvim-web-devicons',
-        after = {
-            'vim-fugitive',
-            'coc.nvim'
-        },
-        config = function()
-            require('lualine').setup {
-                sections = {
-                    lualine_a = {{ 'mode', fmt = function(str) return str:sub(1,1) end }},
-                    lualine_b = {
-                        'branch',
-                        'diff',
-                        { 'diagnostics', sources = { 'coc' }, colored = true,
-                        update_in_insert = true, always_visible = true } },
-                    lualine_c = {{ 'filename', path = 1, symbols = { modified = ' ●', readonly = ' ' } }},
-                    lualine_x = {},
-                    lualine_y = { 'filetype' }
-                },
-                extensions = { 'fugitive' }
-            }
-
-            if _G.Statusline_timer == nil then
-                _G.Statusline_timer = vim.loop.new_timer()
-            else
-                _G.Statusline_timer:stop()
+        use {
+            "olimorris/onedarkpro.nvim",
+            branch = "main",
+            config = function()
+                vim.cmd "colo onedark"
             end
+        }
 
-            _G.Statusline_timer:start(0, 1000, vim.schedule_wrap(function() vim.cmd 'redrawtabline' end))
-        end
-    }
+        -- Git
+        use "tpope/vim-fugitive"
 
-    -- Bufferline
-    use {
-        'akinsho/bufferline.nvim',
-        tag = 'v2.*',
-        requires = 'kyazdani42/nvim-web-devicons',
-        config = function()
-            require('bufferline').setup {}
-        end
-    }
+        use "airblade/vim-gitgutter"
 
-    -- Syntax highlighting
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        config = function()
-            require('nvim-treesitter.configs').setup {
-                ensure_installed = {
-                    'lua',
-                    'rust',
-                    'vim',
-                    'json',
-                    'jsonc',
-                    'toml'
-                },
-                highlight = { enable = true, additional_vim_regex_highlighting = false }
-            }
-        end
-    }
+        -- Lualine
+        use {
+            "nvim-lualine/lualine.nvim",
+            requires = "kyazdani42/nvim-web-devicons",
+            after = {
+                "vim-fugitive",
+                "coc.nvim"
+            },
+            config = function()
+                require("lualine").setup {
+                    sections = {
+                        lualine_a = {
+                            {
+                                "mode",
+                                fmt = function(str)
+                                    return str:sub(1, 1)
+                                end
+                            }
+                        },
+                        lualine_b = {
+                            "branch",
+                            "diff",
+                            {
+                                "diagnostics",
+                                sources = {"coc"},
+                                colored = true,
+                                update_in_insert = true,
+                                always_visible = true
+                            }
+                        },
+                        lualine_c = {{"filename", path = 1, symbols = {modified = " ●", readonly = " "}}},
+                        lualine_x = {},
+                        lualine_y = {"filetype"}
+                    },
+                    extensions = {"fugitive"}
+                }
 
-    use {
-        'm-demare/hlargs.nvim',
-        requires = 'nvim-treesitter/nvim-treesitter',
-        config = function() require('hlargs').setup {} end
-    }
+                if _G.Statusline_timer == nil then
+                    _G.Statusline_timer = vim.loop.new_timer()
+                else
+                    _G.Statusline_timer:stop()
+                end
 
-    -- Autoclosing brackets
-    use {
-	    'windwp/nvim-autopairs',
-        config = function() require('nvim-autopairs').setup {} end
-    }
+                _G.Statusline_timer:start(
+                    0,
+                    1000,
+                    vim.schedule_wrap(
+                        function()
+                            vim.cmd "redrawtabline"
+                        end
+                    )
+                )
+            end
+        }
 
-    -- Bracket operations
-    use {
-        'kylechui/nvim-surround',
-        config = function() require('nvim-surround').setup {} end
-    }
+        -- Bufferline
+        use {
+            "akinsho/bufferline.nvim",
+            requires = "kyazdani42/nvim-web-devicons",
+            config = function()
+                require("bufferline").setup {}
+            end
+        }
 
-    -- Comment operations
-    use 'tpope/vim-commentary'
+        -- Syntax highlighting
+        use {
+            "nvim-treesitter/nvim-treesitter",
+            config = function()
+                require("nvim-treesitter.configs").setup {
+                    ensure_installed = {
+                        "lua",
+                        "rust",
+                        "python",
+                        "vim",
+                        "json",
+                        "jsonc",
+                        "toml"
+                    },
+                    highlight = {enable = true, additional_vim_regex_highlighting = false}
+                }
+            end
+        }
 
-    -- More powerful '.'
-    use 'tpope/vim-repeat'
+        use {
+            "m-demare/hlargs.nvim",
+            requires = "nvim-treesitter/nvim-treesitter",
+            config = function()
+                require("hlargs").setup {}
+            end
+        }
 
-    -- Insert 'end'
-    use 'tpope/vim-endwise'
+        -- Autoclosing brackets
+        use {
+            "windwp/nvim-autopairs",
+            config = function()
+                require("nvim-autopairs").setup {}
+            end
+        }
 
-    -- Better JSON
-    use 'elzr/vim-json'
+        -- Bracket operations
+        use {
+            "kylechui/nvim-surround",
+            config = function()
+                require("nvim-surround").setup {}
+            end
+        }
 
-    -- Formatting
-    use 'sbdchd/neoformat'
+        -- Comment operations
+        use "tpope/vim-commentary"
 
-    -- Indent guides
-    use {
-        'lukas-reineke/indent-blankline.nvim',
-        config = function() require('indent_blankline').setup { filetype_exclude = { 'dashboard' } } end
-    }
+        -- More powerful '.'
+        use "tpope/vim-repeat"
 
-    -- Look up anything
-    use {
-        'nvim-telescope/telescope.nvim',
-        requires = 'nvim-lua/plenary.nvim'
-    }
+        -- Insert 'end'
+        use "tpope/vim-endwise"
 
-    use {
-        'nvim-telescope/telescope-file-browser.nvim',
-        after = 'telescope.nvim',
-        config = function() require('telescope').load_extension 'file_browser' end
-    }
+        -- Better JSON
+        use "elzr/vim-json"
 
-    -- CoC
-    use {
-        'neoclide/coc.nvim',
-        branch = 'release',
-        run = function() vim.cmd [[
+        -- Formatting
+        use "sbdchd/neoformat"
+
+        -- Indent guides
+        use {
+            "lukas-reineke/indent-blankline.nvim",
+            config = function()
+                require("indent_blankline").setup {filetype_exclude = {"dashboard"}}
+            end
+        }
+
+        -- Look up anything
+        use {
+            "nvim-telescope/telescope.nvim",
+            requires = "nvim-lua/plenary.nvim"
+        }
+
+        use {
+            "nvim-telescope/telescope-file-browser.nvim",
+            after = "telescope.nvim",
+            config = function()
+                require("telescope").load_extension "file_browser"
+            end
+        }
+
+        -- CoC
+        use {
+            "neoclide/coc.nvim",
+            branch = "release",
+            run = function()
+                vim.cmd [[
             :CocInstall
                 \ coc-marketplace
                 \ coc-lua
@@ -146,15 +182,25 @@ return require('packer').startup(function(use)
                 \ coc-rust-analyzer
                 \ coc-json
                 \ coc-toml
-        ]] end
-    }
+                \ coc-pyls
+        ]]
+            end
+        }
 
-    -- Speed up loading times
-    use 'lewis6991/impatient.nvim'
+        -- Speed up loading times
+        use "lewis6991/impatient.nvim"
 
-    use 'jghauser/mkdir.nvim'
+        use "jghauser/mkdir.nvim"
 
-    if Packer_bootstrap then
-        require('packer').sync()
+        use {
+            "goolord/alpha-nvim",
+            config = function()
+                require "alpha".setup(require "alpha.themes.dashboard".config)
+            end
+        }
+
+        if Packer_bootstrap then
+            require("packer").sync()
+        end
     end
-end)
+)

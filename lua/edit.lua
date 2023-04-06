@@ -1,13 +1,11 @@
-vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = vim.fn['nvim_treesitter#foldexpr']()
-vim.opt.foldlevelstart = 99
-vim.opt.foldlevel = 99
+-- Clipboard
+vim.opt.clipboard = "unnamedplus"
 
 -- Allow mouse interaction
-vim.opt.mouse = 'a'
+vim.opt.mouse = "a"
 
 -- Allow backspace to delete everything
-vim.opt.backspace = {'indent', 'eol', 'start'}
+vim.opt.backspace = {"indent", "eol", "start"}
 
 local function set_indent(spaces)
     if spaces < 0 then
@@ -33,18 +31,23 @@ vim.opt.autoindent = true
 vim.opt.smarttab = true
 vim.opt.smartindent = true
 
-local function default_cfg()
-    set_linelim(120)
-    set_indent(4)
-end
+vim.api.nvim_create_autocmd(
+    {"BufWritePre"},
+    {
+        pattern = {"*"},
+        callback = function()
+            vim.cmd "Neoformat"
+        end
+    }
+)
 
-vim.api.nvim_create_autocmd({'BufWritePre'}, {
-    pattern = {'*'},
-    callback = function() vim.cmd 'Neoformat' end
-})
-
-
-vim.api.nvim_create_autocmd({'BufEnter', 'BufNewFile'}, {
-    pattern = {'*'},
-    callback = default_cfg
-})
+vim.api.nvim_create_autocmd(
+    {"BufEnter", "BufNewFile"},
+    {
+        pattern = {"*"},
+        callback = function()
+            set_linelim(120)
+            set_indent(4)
+        end
+    }
+)

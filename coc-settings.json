@@ -1,4 +1,3 @@
 {
-    "clangd.inlayHints.enable": false,
-    "rust-analyzer.inlayHints.enable": false
+    "inlayHint.display": false
 }
