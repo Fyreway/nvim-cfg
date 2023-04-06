@@ -31,7 +31,7 @@ return require("packer").startup(
             requires = "kyazdani42/nvim-web-devicons",
             after = {
                 "vim-fugitive",
-                "coc.nvim"
+                "nvim-lspconfig"
             },
             config = function()
                 require("lualine").setup {
@@ -49,7 +49,7 @@ return require("packer").startup(
                             "diff",
                             {
                                 "diagnostics",
-                                sources = {"coc"},
+                                sources = {"nvim_lsp"},
                                 colored = true,
                                 update_in_insert = true,
                                 always_visible = true
@@ -169,21 +169,61 @@ return require("packer").startup(
             end
         }
 
-        -- CoC
         use {
-            "neoclide/coc.nvim",
-            branch = "release",
-            run = function()
-                vim.cmd [[
-            :CocInstall
-                \ coc-marketplace
-                \ coc-lua
-                \ coc-vimlsp
-                \ coc-rust-analyzer
-                \ coc-json
-                \ coc-toml
-                \ coc-pyls
-        ]]
+            "neovim/nvim-lspconfig",
+            config = function()
+                local lspconfig = require("lspconfig")
+                lspconfig.lua_ls.setup {
+                    settings = {
+                        Lua = {
+                            runtime = {
+                                version = "LuaJIT"
+                            },
+                            diagnostics = {
+                                globals = {"vim"}
+                            },
+                            workspace = {
+                                library = vim.api.nvim_get_runtime_file("", true)
+                            },
+                            telemetry = {
+                                enable = false
+                            }
+                        }
+                    }
+                }
+                lspconfig.vimls.setup {}
+                lspconfig.clangd.setup {}
+                lspconfig.cmake.setup {}
+                lspconfig.rust_analyzer.setup {}
+            end
+        }
+
+        use {
+            "ms-jpq/coq_nvim",
+            after = "nvim-lspconfig",
+            requires = {
+                "ms-jpq/coq.artifacts",
+                "ms-jpq/coq.thirdparty"
+            },
+            run = ":COQdeps",
+            config = function()
+                require("coq").Now()
+            end
+        }
+
+        use {
+            "simrat39/rust-tools.nvim",
+            after = "nvim-lspconfig",
+            config = function()
+                require("rust-tools").setup {}
+            end
+        }
+
+        use {
+            "p00f/clangd_extensions.nvim",
+            after = "nvim-lspconfig",
+            config = function()
+                require("clangd_extensions").setup {}
             end
         }
 
@@ -195,8 +235,17 @@ return require("packer").startup(
         use {
             "goolord/alpha-nvim",
             config = function()
-                require "alpha".setup(require "alpha.themes.dashboard".config)
+                require("alpha").setup(require("alpha.themes.dashboard").config)
             end
+        }
+
+        use {
+            "sudormrfbin/cheatsheet.nvim",
+            requires = {
+                "nvim-telescope/telescope.nvim",
+                "nvim-lua/popup.nvim",
+                "nvim-lua/plenary.nvim"
+            }
         }
 
         if Packer_bootstrap then

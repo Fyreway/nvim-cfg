@@ -7,24 +7,13 @@ vim.opt.mouse = "a"
 -- Allow backspace to delete everything
 vim.opt.backspace = {"indent", "eol", "start"}
 
-local function set_indent(spaces)
-    if spaces < 0 then
-        vim.opt_local.tabstop = -spaces
-        vim.opt_local.softtabstop = -spaces
-        vim.opt_local.shiftwidth = -spaces
-        vim.opt_local.expandtab = false
-    else
-        vim.opt_local.tabstop = spaces
-        vim.opt_local.softtabstop = spaces
-        vim.opt_local.shiftwidth = spaces
-        vim.opt_local.expandtab = true
-    end
-end
+vim.opt.colorcolumn = "120"
+vim.opt.textwidth = 119
 
-local function set_linelim(lim)
-    vim.opt_local.colorcolumn = tostring(lim)
-    vim.opt_local.textwidth = lim - 1
-end
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
 
 -- Indenting
 vim.opt.autoindent = true
@@ -37,17 +26,6 @@ vim.api.nvim_create_autocmd(
         pattern = {"*"},
         callback = function()
             vim.cmd "Neoformat"
-        end
-    }
-)
-
-vim.api.nvim_create_autocmd(
-    {"BufEnter", "BufNewFile"},
-    {
-        pattern = {"*"},
-        callback = function()
-            set_linelim(120)
-            set_indent(4)
         end
     }
 )
